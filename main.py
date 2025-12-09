@@ -1,124 +1,116 @@
 """
-CLI tool for summarizing text via Deepseek API.
-
-Usage examples:
-  python main.py summary --file messages.txt
-  python main.py summary --text "любой текст" --max-tokens 256 --json
+Основной файл для запуска Telegram-клиента.
+Собирает сообщения и слушает новые события в реальном времени.
 """
-
 from __future__ import annotations
 
-import argparse
-import json
+import asyncio
 import logging
 import sys
-from typing import Any, Dict
 
-from deepseek import DeepseekError, generate_summary
-from utils import (
-    DEFAULT_CHUNK_SIZE,
-    chunk_text,
-    read_text_from_file,
-    warn_if_too_long,
-)
+from telethon import TelegramClient, events
+from telethon.tl.types import Dialog, Message
+
+from config import load_config
+from db import fetch_last_messages, init_db, save_message
 
 logging.basicConfig(
     level=logging.INFO,
-    format="%(asctime)s [%(levelname)s] %(name)s: %(message)s",
+    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
 )
-logger = logging.getLogger("deepseek-cli")
+logger = logging.getLogger(__name__)
 
 
-def build_parser() -> argparse.ArgumentParser:
-    parser = argparse.ArgumentParser(description="Deepseek summarization CLI")
-    subparsers = parser.add_subparsers(dest="command", required=True)
+async def process_message(message: Message) -> None:
+    """Обрабатывает и сохраняет одно сообщение."""
+    sender_name = "Unknown"
+    if message.sender:
+        sender_name = getattr(message.sender, "first_name", "User") or str(
+            message.sender_id
+        )
 
-    summary_parser = subparsers.add_parser("summary", help="Create a summary")
-    summary_parser.add_argument(
-        "--file", type=str, help="Path to a text file with messages"
-    )
-    summary_parser.add_argument(
-        "--text", type=str, help="Text to summarize (takes priority over --file)"
-    )
-    summary_parser.add_argument(
-        "--max-tokens",
-        type=int,
-        default=512,
-        help="Max tokens for the model response (default: 512)",
-    )
-    summary_parser.add_argument(
-        "--json",
-        action="store_true",
-        help="Output result as JSON",
-    )
-    return parser
+    message_data = {
+        "id": message.id,
+        "chat_id": message.chat_id,
+        "sender": sender_name,
+        "text": message.text,
+        "date": message.date.isoformat(),
+    }
+    await save_message(message_data)
 
 
-def summarize_text(text: str, *, max_tokens: int) -> str:
-    """
-    Handle long texts by chunking and summarizing progressively.
-    """
-    warn_if_too_long(text)
-
-    CHUNK_LIMIT = DEFAULT_CHUNK_SIZE
-    if len(text) <= CHUNK_LIMIT:
-        return generate_summary(text, max_tokens=max_tokens)
-
-    # Chunk the text and summarize each part, then summarize the combined summaries.
-    chunks = chunk_text(text, chunk_size=CHUNK_LIMIT)
-    logger.info("Text will be processed in %d chunks", len(chunks))
-    partial_summaries = []
-    for idx, chunk in enumerate(chunks, start=1):
-        logger.info("Summarizing chunk %d/%d (%d chars)", idx, len(chunks), len(chunk))
-        partial = generate_summary(chunk, max_tokens=max_tokens)
-        partial_summaries.append(partial)
-
-    combined = "\n\n".join(partial_summaries)
-    logger.info("Summarizing combined %d partial summaries", len(partial_summaries))
-    final_summary = generate_summary(combined, max_tokens=max_tokens)
-    return final_summary
-
-
-def handle_summary(args: argparse.Namespace) -> int:
-    text: str | None = None
-
-    if args.text:
-        text = args.text
-    elif args.file:
-        try:
-            text = read_text_from_file(args.file)
-        except FileNotFoundError as exc:
-            logger.error(str(exc))
+async def main() -> int:
+    """Основная функция для запуска клиента."""
+    try:
+        cfg = load_config()
+        if cfg.api_id == 0 or cfg.api_hash == "your_api_hash_here":
+            logger.error(
+                "Пожалуйста, заполните TG_API_ID и TG_API_HASH в вашем .env файле."
+            )
             return 1
-    else:
-        logger.error("Please provide --text or --file")
+    except (ValueError, TypeError) as e:
+        logger.error(f"Ошибка в конфигурации: {e}")
         return 1
+
+    await init_db()
+    logger.info("База данных инициализирована.")
+
+    client = TelegramClient(cfg.session_name, cfg.api_id, cfg.api_hash)
+
+    @client.on(events.NewMessage())
+    async def new_message_handler(event: events.NewMessage.Event):
+        """Обработчик новых сообщений."""
+        message = event.message
+        if not message.text:
+            return
+
+        await process_message(message)
+
+        chat = await event.get_chat()
+        sender = await event.get_sender()
+        sender_name = getattr(sender, "first_name", f"User {sender.id}")
+        chat_title = getattr(chat, "title", f"Chat {chat.id}")
+
+        logger.info(f"[{chat_title}] {sender_name}: {message.text}")
 
     try:
-        summary = summarize_text(text, max_tokens=args.max_tokens)
-    except DeepseekError as exc:
-        logger.error(str(exc))
-        return 1
+        await client.start()
+        logger.info("Клиент успешно запущен.")
 
-    if args.json:
-        output: Dict[str, Any] = {"summary": summary}
-        print(json.dumps(output, ensure_ascii=False, indent=2))
-    else:
-        print(summary)
+        # --- Пример использования ---
+        # 1. Получаем список диалогов
+        dialogs: list[Dialog] = await client.get_dialogs()
+        logger.info("Получены диалоги:")
+        for i, dialog in enumerate(dialogs[:10]):  # Показываем первые 10
+            logger.info(f"  {i+1}. {dialog.name} (ID: {dialog.id})")
+
+        if not dialogs:
+            logger.warning("Диалоги не найдены. Убедитесь, что вы состоите в чатах.")
+            return 1
+
+        # 2. Собираем последние 100 сообщений из первого диалога
+        target_chat = dialogs[0]
+        logger.info(
+            f"Сбор последних 100 сообщений из чата '{target_chat.name}'..."
+        )
+        async for message in client.iter_messages(target_chat, limit=100):
+            if message and message.text:
+                await process_message(message)
+        logger.info("Сбор старых сообщений завершен.")
+
+        # 3. Запускаем слушателя новых сообщений
+        logger.info("Слушатель новых сообщений запущен. Нажмите Ctrl+C для выхода.")
+        await client.run_until_disconnected()
+
+    except Exception as e:
+        logger.error(f"Произошла критическая ошибка: {e}", exc_info=True)
+        return 1
+    finally:
+        if client.is_connected():
+            await client.disconnect()
+        logger.info("Клиент остановлен.")
     return 0
 
 
-def main(argv: list[str] | None = None) -> int:
-    parser = build_parser()
-    args = parser.parse_args(argv)
-
-    if args.command == "summary":
-        return handle_summary(args)
-
-    parser.print_help()
-    return 1
-
-
 if __name__ == "__main__":
-    sys.exit(main())
-
+    sys.exit(asyncio.run(main()))
