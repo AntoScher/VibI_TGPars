@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block title %}Статистика | Telegram Dashboard{% endblock %}
+
+{% block content %}
+    <h2>Общая статистика</h2>
+    <div class="stat-grid">
+        <div class="stat-card">
+            <h3>Всего сообщений</h3>
+            <p>{{ stats.total_messages or 0 }}</p>
+        </div>
+        <div class="stat-card">
+            <h3>Уникальных чатов</h3>
+            <p>{{ stats.unique_chats or 0 }}</p>
+        </div>
+        <div class="stat-card">
+            <h3>Последняя активность</h3>
+            <p>{{ stats.last_message_date or 'Нет данных' }}</p>
+        </div>
+    </div>
+{% endblock %}
+

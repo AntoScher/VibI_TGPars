@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block title %}Сообщения | Telegram Dashboard{% endblock %}
+
+{% block content %}
+    <h2>Список всех сообщений</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Дата</th>
+                <th>Чат ID</th>
+                <th>Отправитель</th>
+                <th>Текст</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for msg in messages %}
+            <tr>
+                <td>{{ msg.date }}</td>
+                <td>{{ msg.chat_id }}</td>
+                <td>{{ msg.sender }}</td>
+                <td>{{ msg.text }}</td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="4" style="text-align: center;">Сообщения не найдены.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
+

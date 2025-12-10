@@ -70,3 +70,35 @@ async def fetch_last_messages(
             rows = await cursor.fetchall()
             return [dict(row) for row in rows]
 
+
+async def get_db_stats(db_path: str = DB_PATH) -> dict[str, Any]:
+    """Fetch statistics from the database."""
+    stats = {"total_messages": 0, "unique_chats": 0, "last_message_date": None}
+    async with aiosqlite.connect(db_path) as db:
+        try:
+            async with db.execute("SELECT COUNT(*) FROM messages") as cursor:
+                stats["total_messages"] = (await cursor.fetchone())[0]
+
+            async with db.execute("SELECT COUNT(DISTINCT chat_id) FROM messages") as cursor:
+                stats["unique_chats"] = (await cursor.fetchone())[0]
+
+            async with db.execute("SELECT MAX(date) FROM messages") as cursor:
+                date_val = await cursor.fetchone()
+                if date_val and date_val[0]:
+                    stats["last_message_date"] = date_val[0].split("T")[0]
+
+        except aiosqlite.OperationalError:
+            # Table might not exist yet if no messages are saved
+            pass
+    return stats
+
+
+async def fetch_all_messages(db_path: str = DB_PATH) -> list[dict]:
+    """Fetch all stored messages, ordered descending by date."""
+    async with aiosqlite.connect(db_path) as db:
+        db.row_factory = aiosqlite.Row
+        async with db.execute(
+            "SELECT id, chat_id, sender, text, date FROM messages ORDER BY date DESC"
+        ) as cursor:
+            rows = await cursor.fetchall()
+            return [dict(row) for row in rows]

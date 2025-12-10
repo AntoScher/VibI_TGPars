@@ -4,3 +4,6 @@ requests
 aiosqlite
 pyTelegramBotAPI
 aiohttp
+fastapi
+uvicorn[standard]
+jinja2
