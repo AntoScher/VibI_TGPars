@@ -1,0 +1,143 @@
+2025-12-10 21:46:19,461 [INFO] telegram-bot: Starting Telegram bot...
+2025-12-10 21:46:19,770 [INFO] telegram-bot: Webhook deleted (if existed)
+2025-12-10 21:46:19,770 [INFO] telegram-bot: Starting polling...
+2025-12-10 21:46:19,770 (async_telebot.py:379 MainThread) ERROR - TeleBot: "Infinity polling exception: telebot.async_telebot.AsyncTeleBot._process_polling() got multiple values for keyword argument 'non_stop'"
+2025-12-10 21:46:19,770 [ERROR] TeleBot: Infinity polling exception: telebot.async_telebot.AsyncTeleBot._process_polling() got multiple values for keyword argument 'non_stop'
+2025-12-10 21:46:19,776 (async_telebot.py:381 MainThread) ERROR - TeleBot: "Exception traceback:
+Traceback (most recent call last):
+  File "C:\Users\lsche\AppData\Local\Programs\Python\Python310\lib\site-packages\telebot\async_telebot.py", line 375, in infinity_polling
+    await self._process_polling(non_stop=True, timeout=timeout, request_timeout=request_timeout,
+TypeError: telebot.async_telebot.AsyncTeleBot._process_polling() got multiple values for keyword argument 'non_stop'
+"
+2025-12-10 21:46:19,776 [ERROR] TeleBot: Exception traceback:
+Traceback (most recent call last):
+  File "C:\Users\lsche\AppData\Local\Programs\Python\Python310\lib\site-packages\telebot\async_telebot.py", line 375, in infinity_polling
+    await self._process_polling(non_stop=True, timeout=timeout, request_timeout=request_timeout,
+TypeError: telebot.async_telebot.AsyncTeleBot._process_polling() got multiple values for keyword argument 'non_stop'
+
+2025-12-10 21:46:22,778 (async_telebot.py:379 MainThread) ERROR - TeleBot: "Infinity polling exception: telebot.async_telebot.AsyncTeleBot._process_polling() got multiple values for keyword argument 'non_stop'"
+2025-12-10 21:46:22,778 [ERROR] TeleBot: Infinity polling exception: telebot.async_telebot.AsyncTeleBot._process_polling() got multiple values for keyword argument 'non_stop'
+2025-12-10 21:46:22,778 (async_telebot.py:381 MainThread) ERROR - TeleBot: "Exception traceback:
+Traceback (most recent call last):
+  File "C:\Users\lsche\AppData\Local\Programs\Python\Python310\lib\site-packages\telebot\async_telebot.py", line 375, in infinity_polling
+    await self._process_polling(non_stop=True, timeout=timeout, request_timeout=request_timeout,
+TypeError: telebot.async_telebot.AsyncTeleBot._process_polling() got multiple values for keyword argument 'non_stop'
+"
+2025-12-10 21:46:22,778 [ERROR] TeleBot: Exception traceback:
+Traceback (most recent call last):
+  File "C:\Users\lsche\AppData\Local\Programs\Python\Python310\lib\site-packages\telebot\async_telebot.py", line 375, in infinity_polling
+    await self._process_polling(non_stop=True, timeout=timeout, request_timeout=request_timeout,
+TypeError: telebot.async_telebot.AsyncTeleBot._process_polling() got multiple values for keyword argument 'non_stop'
+
+2025-12-10 21:46:25,779 (async_telebot.py:379 MainThread) ERROR - TeleBot: "Infinity polling exception: telebot.async_telebot.AsyncTeleBot._process_polling() got multiple values for keyword argument 'non_stop'"
+2025-12-10 21:46:25,779 [ERROR] TeleBot: Infinity polling exception: telebot.async_telebot.AsyncTeleBot._process_polling() got multiple values for keyword argument 'non_stop'
+2025-12-10 21:46:25,783 (async_telebot.py:381 MainThread) ERROR - TeleBot: "Exception traceback:
+Traceback (most recent call last):
+  File "C:\Users\lsche\AppData\Local\Programs\Python\Python310\lib\site-packages\telebot\async_telebot.py", line 375, in infinity_polling
+    await self._process_polling(non_stop=True, timeout=timeout, request_timeout=request_timeout,
+TypeError: telebot.async_telebot.AsyncTeleBot._process_polling() got multiple values for keyword argument 'non_stop'
+"
+2025-12-10 21:46:25,783 [ERROR] TeleBot: Exception traceback:
+Traceback (most recent call last):
+  File "C:\Users\lsche\AppData\Local\Programs\Python\Python310\lib\site-packages\telebot\async_telebot.py", line 375, in infinity_polling
+    await self._process_polling(non_stop=True, timeout=timeout, request_timeout=request_timeout,
+TypeError: telebot.async_telebot.AsyncTeleBot._process_polling() got multiple values for keyword argument 'non_stop'
+
+2025-12-10 21:46:28,787 (async_telebot.py:379 MainThread) ERROR - TeleBot: "Infinity polling exception: telebot.async_telebot.AsyncTeleBot._process_polling() got multiple values for keyword argument 'non_stop'"
+2025-12-10 21:46:28,787 [ERROR] TeleBot: Infinity polling exception: telebot.async_telebot.AsyncTeleBot._process_polling() got multiple values for keyword argument 'non_stop'
+2025-12-10 21:46:28,791 (async_telebot.py:381 MainThread) ERROR - TeleBot: "Exception traceback:
+Traceback (most recent call last):
+  File "C:\Users\lsche\AppData\Local\Programs\Python\Python310\lib\site-packages\telebot\async_telebot.py", line 375, in infinity_polling
+    await self._process_polling(non_stop=True, timeout=timeout, request_timeout=request_timeout,
+TypeError: telebot.async_telebot.AsyncTeleBot._process_polling() got multiple values for keyword argument 'non_stop'
+"
+2025-12-10 21:46:28,791 [ERROR] TeleBot: Exception traceback:
+Traceback (most recent call last):
+  File "C:\Users\lsche\AppData\Local\Programs\Python\Python310\lib\site-packages\telebot\async_telebot.py", line 375, in infinity_polling
+    await self._process_polling(non_stop=True, timeout=timeout, request_timeout=request_timeout,
+TypeError: telebot.async_telebot.AsyncTeleBot._process_polling() got multiple values for keyword argument 'non_stop'
+
+2025-12-10 21:46:31,795 (async_telebot.py:379 MainThread) ERROR - TeleBot: "Infinity polling exception: telebot.async_telebot.AsyncTeleBot._process_polling() got multiple values for keyword argument 'non_stop'"
+2025-12-10 21:46:31,795 [ERROR] TeleBot: Infinity polling exception: telebot.async_telebot.AsyncTeleBot._process_polling() got multiple values for keyword argument 'non_stop'
+2025-12-10 21:46:31,800 (async_telebot.py:381 MainThread) ERROR - TeleBot: "Exception traceback:
+Traceback (most recent call last):
+  File "C:\Users\lsche\AppData\Local\Programs\Python\Python310\lib\site-packages\telebot\async_telebot.py", line 375, in infinity_polling
+    await self._process_polling(non_stop=True, timeout=timeout, request_timeout=request_timeout,
+TypeError: telebot.async_telebot.AsyncTeleBot._process_polling() got multiple values for keyword argument 'non_stop'
+"
+2025-12-10 21:46:31,800 [ERROR] TeleBot: Exception traceback:
+Traceback (most recent call last):
+  File "C:\Users\lsche\AppData\Local\Programs\Python\Python310\lib\site-packages\telebot\async_telebot.py", line 375, in infinity_polling
+    await self._process_polling(non_stop=True, timeout=timeout, request_timeout=request_timeout,
+TypeError: telebot.async_telebot.AsyncTeleBot._process_polling() got multiple values for keyword argument 'non_stop'
+
+2025-12-10 21:46:34,801 (async_telebot.py:379 MainThread) ERROR - TeleBot: "Infinity polling exception: telebot.async_telebot.AsyncTeleBot._process_polling() got multiple values for keyword argument 'non_stop'"
+2025-12-10 21:46:34,801 [ERROR] TeleBot: Infinity polling exception: telebot.async_telebot.AsyncTeleBot._process_polling() got multiple values for keyword argument 'non_stop'
+2025-12-10 21:46:34,801 (async_telebot.py:381 MainThread) ERROR - TeleBot: "Exception traceback:
+Traceback (most recent call last):
+  File "C:\Users\lsche\AppData\Local\Programs\Python\Python310\lib\site-packages\telebot\async_telebot.py", line 375, in infinity_polling
+    await self._process_polling(non_stop=True, timeout=timeout, request_timeout=request_timeout,
+TypeError: telebot.async_telebot.AsyncTeleBot._process_polling() got multiple values for keyword argument 'non_stop'
+"
+2025-12-10 21:46:34,801 [ERROR] TeleBot: Exception traceback:
+Traceback (most recent call last):
+  File "C:\Users\lsche\AppData\Local\Programs\Python\Python310\lib\site-packages\telebot\async_telebot.py", line 375, in infinity_polling
+    await self._process_polling(non_stop=True, timeout=timeout, request_timeout=request_timeout,
+TypeError: telebot.async_telebot.AsyncTeleBot._process_polling() got multiple values for keyword argument 'non_stop'
+
+2025-12-10 21:46:37,811 (async_telebot.py:379 MainThread) ERROR - TeleBot: "Infinity polling exception: telebot.async_telebot.AsyncTeleBot._process_polling() got multiple values for keyword argument 'non_stop'"
+2025-12-10 21:46:37,811 [ERROR] TeleBot: Infinity polling exception: telebot.async_telebot.AsyncTeleBot._process_polling() got multiple values for keyword argument 'non_stop'
+2025-12-10 21:46:37,816 (async_telebot.py:381 MainThread) ERROR - TeleBot: "Exception traceback:
+Traceback (most recent call last):
+  File "C:\Users\lsche\AppData\Local\Programs\Python\Python310\lib\site-packages\telebot\async_telebot.py", line 375, in infinity_polling
+    await self._process_polling(non_stop=True, timeout=timeout, request_timeout=request_timeout,
+TypeError: telebot.async_telebot.AsyncTeleBot._process_polling() got multiple values for keyword argument 'non_stop'
+"
+2025-12-10 21:46:37,816 [ERROR] TeleBot: Exception traceback:
+Traceback (most recent call last):
+  File "C:\Users\lsche\AppData\Local\Programs\Python\Python310\lib\site-packages\telebot\async_telebot.py", line 375, in infinity_polling
+    await self._process_polling(non_stop=True, timeout=timeout, request_timeout=request_timeout,
+TypeError: telebot.async_telebot.AsyncTeleBot._process_polling() got multiple values for keyword argument 'non_stop'
+
+2025-12-10 21:46:40,820 (async_telebot.py:379 MainThread) ERROR - TeleBot: "Infinity polling exception: telebot.async_telebot.AsyncTeleBot._process_polling() got multiple values for keyword argument 'non_stop'"
+2025-12-10 21:46:40,820 [ERROR] TeleBot: Infinity polling exception: telebot.async_telebot.AsyncTeleBot._process_polling() got multiple values for keyword argument 'non_stop'
+2025-12-10 21:46:40,824 (async_telebot.py:381 MainThread) ERROR - TeleBot: "Exception traceback:
+Traceback (most recent call last):
+  File "C:\Users\lsche\AppData\Local\Programs\Python\Python310\lib\site-packages\telebot\async_telebot.py", line 375, in infinity_polling
+    await self._process_polling(non_stop=True, timeout=timeout, request_timeout=request_timeout,
+TypeError: telebot.async_telebot.AsyncTeleBot._process_polling() got multiple values for keyword argument 'non_stop'
+"
+2025-12-10 21:46:40,824 [ERROR] TeleBot: Exception traceback:
+Traceback (most recent call last):
+  File "C:\Users\lsche\AppData\Local\Programs\Python\Python310\lib\site-packages\telebot\async_telebot.py", line 375, in infinity_polling
+    await self._process_polling(non_stop=True, timeout=timeout, request_timeout=request_timeout,
+TypeError: telebot.async_telebot.AsyncTeleBot._process_polling() got multiple values for keyword argument 'non_stop'
+
+2025-12-10 21:46:43,828 (async_telebot.py:379 MainThread) ERROR - TeleBot: "Infinity polling exception: telebot.async_telebot.AsyncTeleBot._process_polling() got multiple values for keyword argument 'non_stop'"
+2025-12-10 21:46:43,828 [ERROR] TeleBot: Infinity polling exception: telebot.async_telebot.AsyncTeleBot._process_polling() got multiple values for keyword argument 'non_stop'
+2025-12-10 21:46:43,832 (async_telebot.py:381 MainThread) ERROR - TeleBot: "Exception traceback:
+Traceback (most recent call last):
+  File "C:\Users\lsche\AppData\Local\Programs\Python\Python310\lib\site-packages\telebot\async_telebot.py", line 375, in infinity_polling
+    await self._process_polling(non_stop=True, timeout=timeout, request_timeout=request_timeout,
+TypeError: telebot.async_telebot.AsyncTeleBot._process_polling() got multiple values for keyword argument 'non_stop'
+"
+2025-12-10 21:46:43,832 [ERROR] TeleBot: Exception traceback:
+Traceback (most recent call last):
+  File "C:\Users\lsche\AppData\Local\Programs\Python\Python310\lib\site-packages\telebot\async_telebot.py", line 375, in infinity_polling
+    await self._process_polling(non_stop=True, timeout=timeout, request_timeout=request_timeout,
+TypeError: telebot.async_telebot.AsyncTeleBot._process_polling() got multiple values for keyword argument 'non_stop'
+
+2025-12-10 21:46:46,837 (async_telebot.py:379 MainThread) ERROR - TeleBot: "Infinity polling exception: telebot.async_telebot.AsyncTeleBot._process_polling() got multiple values for keyword argument 'non_stop'"
+2025-12-10 21:46:46,837 [ERROR] TeleBot: Infinity polling exception: telebot.async_telebot.AsyncTeleBot._process_polling() got multiple values for keyword argument 'non_stop'
+2025-12-10 21:46:46,841 (async_telebot.py:381 MainThread) ERROR - TeleBot: "Exception traceback:
+Traceback (most recent call last):
+  File "C:\Users\lsche\AppData\Local\Programs\Python\Python310\lib\site-packages\telebot\async_telebot.py", line 375, in infinity_polling
+    await self._process_polling(non_stop=True, timeout=timeout, request_timeout=request_timeout,
+TypeError: telebot.async_telebot.AsyncTeleBot._process_polling() got multiple values for keyword argument 'non_stop'
+"
+2025-12-10 21:46:46,841 [ERROR] TeleBot: Exception traceback:
+Traceback (most recent call last):
+  File "C:\Users\lsche\AppData\Local\Programs\Python\Python310\lib\site-packages\telebot\async_telebot.py", line 375, in infinity_polling
+    await self._process_polling(non_stop=True, timeout=timeout, request_timeout=request_timeout,
+TypeError: telebot.async_telebot.AsyncTeleBot._process_polling() got multiple values for keyword argument 'non_stop'
+

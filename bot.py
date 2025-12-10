@@ -4,6 +4,7 @@
 import logging
 from typing import Optional
 import telebot
+from telebot.async_telebot import AsyncTeleBot
 from telebot import types
 from telebot.apihelper import ApiTelegramException
 from config import load_config
@@ -23,7 +24,7 @@ except ValueError as e:
     raise
 
 # Создаем экземпляр бота
-bot = telebot.async_telebot.AsyncTeleBot(
+bot = AsyncTeleBot(
     cfg.bot_token,
     parse_mode="HTML"
 )
@@ -138,7 +139,7 @@ async def run_bot() -> None:
 
         # Запускаем с обработкой ошибок
         logger.info("Starting polling...")
-        await bot.infinity_polling(none_stop=True, timeout=30)
+        await bot.infinity_polling(timeout=30)
 
     except KeyboardInterrupt:
         logger.info("Bot stopped by user")
