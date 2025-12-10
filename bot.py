@@ -6,7 +6,8 @@ from typing import Optional
 import telebot
 from telebot import types
 from telebot.apihelper import ApiTelegramException
-from config import get_bot_token
+from config import load_config
+from deepseek import generate_summary, DeepseekError
 
 # Настройка логирования
 logging.basicConfig(
@@ -14,24 +15,20 @@ logging.basicConfig(
     format="%(asctime)s [%(levelname)s] %(name)s: %(message)s",
 )
 logger = logging.getLogger("telegram-bot")
-
-# Получаем токен бота из .env файла
+# Загружаем конфигурацию
 try:
-    BOT_TOKEN = get_bot_token()
-    # Список разрешенных пользователей (можно вынести в конфиг)
-    ALLOWED_USERS = [1507961620]  # Замените на нужные ID
+    cfg = load_config()
 except ValueError as e:
-    logger.error(str(e))
+    logger.error(f"Configuration error: {e}")
     raise
 
-# Создаем экземпляр бота с улучшенными настройками
-bot = telebot.TeleBot(
-    BOT_TOKEN,
-    parse_mode="HTML",
-    threaded=True
-)
+# Создаем экземпляр бота
+bot = telebot.TeleBot(cfg.bot_token, parse_mode="HTML", threaded=True)
+
+ALLOWED_USERS = cfg.allowed_user_ids
 
 
+# --- Обработчики ---
 def is_user_allowed(user_id: int) -> bool:
     """Проверяет, есть ли у пользователя доступ к боту."""
     return user_id in ALLOWED_USERS
@@ -79,13 +76,17 @@ def handle_summary(message: types.Message) -> None:
         # Показываем "печатает..."
         bot.send_chat_action(message.chat.id, 'typing')
 
-        # Здесь будет вызов функции суммаризации
-        # summary = generate_summary(text_to_summarize)
-        summary = f"🔍 <b>Суммаризация:</b>\n\n{text_to_summarize[:100]}..."
+        # Вызов функции суммаризации из deepseek.py
+        raw_summary = generate_summary(text_to_summarize)
+        summary = f"🔍 <b>Краткая выжимка:</b>\n\n{raw_summary}"
 
         bot.reply_to(message, summary, parse_mode="HTML")
         logger.info(f"Generated summary for user {message.from_user.id}")
 
+    except DeepseekError as e:
+        error_msg = f"❌ Ошибка при обращении к сервису суммиризации: {e}"
+        bot.reply_to(message, error_msg)
+        logger.error(f"Deepseek API error for user {message.from_user.id}: {str(e)}")
     except Exception as e:
         error_msg = "❌ Произошла ошибка при обработке запроса"
         bot.reply_to(message, error_msg)
@@ -117,6 +118,7 @@ def handle_message(message: types.Message) -> None:
             logger.critical("Critical error: cannot send error message to user")
 
 
+# --- Запуск бота ---
 def run_bot() -> None:
     """Запуск бота с обработкой ошибок."""
     logger.info("Starting Telegram bot...")
