@@ -5,10 +5,11 @@ Uses synchronous requests to call /chat/completions for summarization.
 from __future__ import annotations
 
 import os
+import asyncio
 from typing import Any, Dict
 
-import requests
 from dotenv import load_dotenv
+import aiohttp
 
 load_dotenv()
 
@@ -28,14 +29,15 @@ def _get_api_key() -> str:
     return api_key
 
 
-def generate_summary(text: str, *, max_tokens: int = 512) -> str:
+async def generate_summary(text: str, *, max_tokens: int = 512) -> str:
     """
     Call Deepseek chat/completions to generate a summary for the provided text.
+    Uses aiohttp for asynchronous requests.
     Raises DeepseekError on failures.
     """
     api_key = _get_api_key()
     url = f"{API_BASE}{COMPLETIONS_PATH}"
-    payload: Dict[str, Any] = {
+    payload: dict[str, Any] = {
         "model": MODEL_NAME,
         "messages": [
             {
@@ -56,18 +58,20 @@ def generate_summary(text: str, *, max_tokens: int = 512) -> str:
     }
 
     try:
-        response = requests.post(url, json=payload, headers=headers, timeout=60)
-    except requests.RequestException as exc:
+        async with aiohttp.ClientSession(headers=headers) as session:
+            async with session.post(
+                url, json=payload, timeout=60
+            ) as response:
+                if response.status != 200:
+                    response_text = await response.text()
+                    raise DeepseekError(
+                        f"Deepseek API returned {response.status}: {response_text}"
+                    )
+                data = await response.json()
+    except (aiohttp.ClientError, asyncio.TimeoutError) as exc:
         raise DeepseekError(f"Network error while calling Deepseek: {exc}") from exc
 
-    if response.status_code != 200:
-        raise DeepseekError(
-            f"Deepseek API returned {response.status_code}: {response.text}"
-        )
-
-    data = response.json()
     try:
         return data["choices"][0]["message"]["content"].strip()
     except (KeyError, IndexError, TypeError) as exc:
         raise DeepseekError(f"Unexpected response format: {data}") from exc
-
