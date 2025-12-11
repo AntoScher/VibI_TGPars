@@ -5,11 +5,12 @@ from __future__ import annotations
 
 import asyncio
 from typing import Any, Dict, Optional
+import os
 
 import aiosqlite
 
-DB_PATH = "messages.db"
-
+# Путь к БД теперь настраивается через переменную окружения для гибкости при деплое
+DB_PATH = os.getenv("DB_PATH", "messages.db")
 
 CREATE_TABLE_SQL = """
 CREATE TABLE IF NOT EXISTS messages (
