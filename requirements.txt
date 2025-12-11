@@ -1,9 +1,8 @@
-telethon
-python-dotenv
-requests
-aiosqlite
-pyTelegramBotAPI
 aiohttp
+aiosqlite
 fastapi
-uvicorn[standard]
 jinja2
+pyTelegramBotAPI
+python-dotenv
+telethon
+uvicorn[standard]
