@@ -71,6 +71,24 @@ async def fetch_last_messages(
             return [dict(row) for row in rows]
 
 
+async def search_messages(keyword: str, limit: int = 30, db_path: str = DB_PATH) -> list[dict]:
+    """Search for messages containing a keyword."""
+    async with aiosqlite.connect(db_path) as db:
+        db.row_factory = aiosqlite.Row
+        async with db.execute(
+            """
+            SELECT id, chat_id, sender, text, date
+            FROM messages
+            WHERE text LIKE ?
+            ORDER BY date DESC
+            LIMIT ?
+            """,
+            (f"%{keyword}%", limit),
+        ) as cursor:
+            rows = await cursor.fetchall()
+            return [dict(row) for row in rows]
+
+
 async def get_db_stats(db_path: str = DB_PATH) -> dict[str, Any]:
     """Fetch statistics from the database."""
     stats = {"total_messages": 0, "unique_chats": 0, "last_message_date": None}
@@ -93,12 +111,27 @@ async def get_db_stats(db_path: str = DB_PATH) -> dict[str, Any]:
     return stats
 
 
-async def fetch_all_messages(db_path: str = DB_PATH) -> list[dict]:
-    """Fetch all stored messages, ordered descending by date."""
+async def fetch_paginated_messages(
+    page: int = 1, page_size: int = 50, db_path: str = DB_PATH
+) -> tuple[list[dict], int]:
+    """Fetch a paginated list of messages and the total number of pages."""
     async with aiosqlite.connect(db_path) as db:
         db.row_factory = aiosqlite.Row
+
+        # 1. Получаем общее количество сообщений для расчета страниц
+        async with db.execute("SELECT COUNT(*) FROM messages") as cursor:
+            total_messages = (await cursor.fetchone())[0]
+
+        total_pages = (total_messages + page_size - 1) // page_size or 1
+
+        # 2. Получаем сообщения для текущей страницы
+        offset = (page - 1) * page_size
         async with db.execute(
-            "SELECT id, chat_id, sender, text, date FROM messages ORDER BY date DESC"
+            """
+            SELECT id, chat_id, sender, text, date FROM messages
+            ORDER BY date DESC LIMIT ? OFFSET ?
+            """,
+            (page_size, offset),
         ) as cursor:
             rows = await cursor.fetchall()
-            return [dict(row) for row in rows]
+            return [dict(row) for row in rows], total_pages

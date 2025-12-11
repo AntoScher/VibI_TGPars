@@ -5,7 +5,7 @@ from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 
 # Импортируем наши асинхронные функции из db.py
-from db import fetch_last_messages, init_db, get_db_stats, fetch_all_messages
+from db import fetch_last_messages, init_db, get_db_stats, fetch_paginated_messages
 
 # Настройка логирования
 logging.basicConfig(level=logging.INFO)
@@ -58,11 +58,20 @@ async def get_dashboard(request: Request):
     )
 
 @app.get("/messages", response_class=HTMLResponse, summary="Страница со всеми сообщениями")
-async def get_all_messages_page(request: Request):
+async def get_all_messages_page(
+    request: Request,
+    page: int = Query(1, ge=1, description="Номер страницы"),
+    size: int = Query(50, ge=10, le=200, description="Сообщений на странице")
+):
     """
     Отображает страницу со списком всех сообщений из базы данных.
     """
-    messages = await fetch_all_messages()
+    messages, total_pages = await fetch_paginated_messages(page=page, page_size=size)
     return templates.TemplateResponse(
-        "messages.html", {"request": request, "messages": messages}
+        "messages.html", {
+            "request": request,
+            "messages": messages,
+            "current_page": page,
+            "total_pages": total_pages,
+        }
     )

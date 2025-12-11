@@ -84,18 +84,30 @@ async def main() -> int:
         for i, dialog in enumerate(dialogs[:10]):  # Показываем первые 10
             logger.info(f"  {i+1}. {dialog.name} (ID: {dialog.id})")
 
-        if not dialogs:
-            logger.warning("Диалоги не найдены. Убедитесь, что вы состоите в чатах.")
-            return 1
+        # 2. Собираем сообщения из целевых чатов
+        if cfg.target_chat_ids:
+            logger.info(f"Начинается сбор сообщений из целевых чатов: {cfg.target_chat_ids}")
+            for chat_id in cfg.target_chat_ids:
+                try:
+                    logger.info(f"Сбор из чата {chat_id}...")
+                    async for message in client.iter_messages(chat_id, limit=cfg.history_fetch_limit):
+                        if message and message.text:
+                            await process_message(message)
+                except Exception as e:
+                    logger.error(f"Не удалось получить сообщения из чата {chat_id}: {e}")
+        else:
+            # Собираем последние 100 сообщений из первого диалога, если цели не указаны
+            if not dialogs:
+                logger.warning("Диалоги не найдены и TARGET_CHAT_IDS не указан. Сбор исторических сообщений пропущен.")
+            else:
+                target_chat = dialogs[0]
+                logger.info(
+                    f"TARGET_CHAT_IDS не указан. Сбор последних {cfg.history_fetch_limit} сообщений из первого чата '{target_chat.name}'..."
+                )
+                async for message in client.iter_messages(target_chat, limit=cfg.history_fetch_limit):
+                    if message and message.text:
+                        await process_message(message)
 
-        # 2. Собираем последние 100 сообщений из первого диалога
-        target_chat = dialogs[0]
-        logger.info(
-            f"Сбор последних 100 сообщений из чата '{target_chat.name}'..."
-        )
-        async for message in client.iter_messages(target_chat, limit=100):
-            if message and message.text:
-                await process_message(message)
         logger.info("Сбор старых сообщений завершен.")
 
         # 3. Запускаем слушателя новых сообщений

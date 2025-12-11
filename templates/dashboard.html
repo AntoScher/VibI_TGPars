@@ -1,18 +1,12 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard</title>
-</head>
-<body>
-    <h1>Telegram Message Analyzer</h1>
-    <h2>Database Statistics</h2>
+{% extends "base.html" %}
+
+{% block title %}Дашборд | Telegram Analyzer{% endblock %}
+
+{% block content %}
+    <h2>📊 Статистика базы данных</h2>
     <ul>
-        <li>Total Messages: {{ stats.total_messages }}</li>
-        <li>Unique Chats: {{ stats.unique_chats }}</li>
-        <li>Last Message Date: {{ stats.last_message_date or 'N/A' }}</li>
+        <li>Всего сообщений: <strong>{{ stats.total_messages }}</strong></li>
+        <li>Уникальных чатов: <strong>{{ stats.unique_chats }}</strong></li>
+        <li>Дата последнего сообщения: <strong>{{ stats.last_message_date or 'Нет данных' }}</strong></li>
     </ul>
-    <a href="/messages">View All Messages</a>
-</body>
-</html>
+{% endblock %}

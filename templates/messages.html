@@ -28,5 +28,16 @@
             {% endfor %}
         </tbody>
     </table>
-{% endblock %}
 
+    <div style="text-align: center; margin-top: 20px;">
+        {% if current_page > 1 %}
+            <a href="?page={{ current_page - 1 }}&size={{ request.query_params.get('size', 50) }}">&laquo; Предыдущая</a>
+        {% endif %}
+
+        <span>Страница {{ current_page }} из {{ total_pages }}</span>
+
+        {% if current_page < total_pages %}
+            <a href="?page={{ current_page + 1 }}&size={{ request.query_params.get('size', 50) }}">Следующая &raquo;</a>
+        {% endif %}
+    </div>
+{% endblock %}
